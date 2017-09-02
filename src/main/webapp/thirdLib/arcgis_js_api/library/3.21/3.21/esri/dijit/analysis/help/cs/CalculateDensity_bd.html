@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpInfoArr, helpEnvFilter, envContent, hideEnvClass, hideNodes;
+                helpInfo = window.location.hash.substring(1);
+                    if(helpInfo.indexOf("-")) {
+                        helpInfoArr = helpInfo.split("-");
+                        helpId = helpInfoArr[0];
+                        helpEnvFilter = helpInfoArr[1];
+                    }
+                    else {
+                        helpId = helpInfo;
+                    }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                    hideEnvClass = (helpEnvFilter === "OnlineOnly"? "PortalOnly": "OnlineOnly");
+                    if(document.getElementsByClassName) {
+                        hideNodes = document.getElementsByClassName(hideEnvClass);
+                    }
+                    else {
+                        hideNodes = document.querySelectorAll(hideEnvClass);
+                    }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                    }
+                    for(i=0; i < hideNodes.length; i++) {
+                        hideNodes[i].style.display ="none";
+                    }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="largesize">
+        <h2>Vypočítat hustotu</h2><p/>
+        <h2><img src="../images/GUID-38AD3C19-0400-4E5A-9282-BDE42F2BBFC1-web.png" alt="Calculate Density"></h2>
+        <hr/>
+    <p>The Calculate Density tool creates a density map from point features by spreading known quantities of some phenomenon (represented as attributes of the points) across the map. The result is a layer of areas classified from least dense to most dense.   
+
+    </p>
+    <p>For point input, each point should represent the location of some event or incident, and the result layer represents a count of the incident per unit area.  A higher density value in a new location means that there are more points near that location.  In many cases, the result layer can be interpreted as a risk surface for future events. For example, if the input points represent locations of lightning strikes, the result layer can be interpreted as a risk surface for future lightning strikes.
+    </p>
+    <p>Other use cases of this tool include the following:
+        <ul>
+            <li>Creating crime-density maps to help police departments properly allocate resources to high crime areas.
+            </li>
+            <li>Calculating densities of hospitals within a county.  The result layer will show areas with high and low accessibility to hospitals, and this information can be used to decide where new hospitals should be built.
+            </li>
+            <li>Identifying areas that are at high risk of forest fires based on historical locations of forest fires.
+            </li>
+            <li>Locating communities that are far from major highways in order to plan where new roads should be constructed.
+            </li>
+        </ul>
+        
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div><h2>Zvolit bodovou vrstvu, ze které bude vypočítána hustota</h2></div>
+        <hr/>
+        <div>
+            <p>The point layer on which the density will be calculated.
+            </p>
+            <p>Kromě v&yacute;běru vrstvy z&nbsp;mapy můžete tak&eacute; zvolit položku  <b>Proch&aacute;zet vrstvy</b> kter&aacute; se nach&aacute;z&iacute; v&nbsp;doln&iacute; č&aacute;sti rozbalovac&iacute; nab&iacute;dky, abyste ve sv&eacute;m obsahu mohli naj&iacute;t vrstvu prvků nebo datovou sadu sd&iacute;len&yacute;ch souborů velk&yacute;ch dat.
+            </p>
+        </div>
+    </div>
+    <div id="fields">
+        <div><h2>Zvolit jedno nebo více polí, u kterých bude vypočítána hustota (volitelné)</h2></div>
+        <hr/>
+        <div>
+            <p>Provide  one or more fields specifying the number of incidents at each location.  For example, if you have points that represent cities, you can use a field representing the population of the city as the count field, and the resulting population density layer will calculate larger population densities near cities with larger populations.
+            </p>
+            <p>The density for the count of points will always be calculated.   If no fields are selected, each location will be assumed to represent a single count.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div><h2>Zvolit tvar zásobníku</h2></div>
+        <hr/>
+        <div>
+            <p>The shape of bins that points are aggregated into and used for the density calculation.
+            </p>
+            <p>Anal&yacute;za s&nbsp;použit&iacute;m  <b>čtvercov&yacute;ch</b> nebo <b>&scaron;esti&uacute;heln&iacute;kov&yacute;ch</b> bloků vyžaduje rovinn&yacute; souřadnicov&yacute; syst&eacute;m. Můžete nastavit <b>Souřadnicov&yacute; syst&eacute;m pro zpracov&aacute;n&iacute;</b> v <b>Prostřed&iacute; anal&yacute;zy</b>. Pokud v&aacute;&scaron; souřadnicov&yacute; syst&eacute;m pro zpracov&aacute;n&iacute; nen&iacute; nastaven na rovinn&yacute; souřadnicov&yacute; syst&eacute;m, budete vyzv&aacute;ni k&nbsp;jeho nastaven&iacute; při <b>Spu&scaron;těn&iacute; anal&yacute;zy</b>.
+            </p>
+        </div>
+    </div>
+    <div id="binSizing">
+        <div><h2>Vybrat velikost zásobníku k seskupení</h2></div>
+        <hr/>
+        <div>
+            <p>The size of the bins generated. For a square bin, the size represents the height of the square. For hexagon, the size represents the height of the hexagon (from parallel sides).
+            </p>
+        </div>
+    </div>
+    <div id="weight">
+        <div><h2>Vybrat váhu hustoty pro použití</h2></div>
+        <hr/>
+        <div>
+            <p>The type of weighting applied to the density calculation. There are two options:
+                <ul>
+                    <li> <b>Uniform</b>&mdash;This calculates a magnitude per area.
+                    </li>
+                    <li> <b>Kernel</b>&mdash;Applies a kernel function to fit a smooth tapered surface to each point.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="neighborhood">
+        <div><h2>Vybrat velikost sousedství</h2></div>
+        <hr/>
+        <div>
+            <p>The size of the area used to calculate the density. The neighborhood size must be larger than the bin size.
+            </p>
+        </div>
+    </div>
+    <div id="areaUnits">
+        <div><h2>Zvolit výstupní jednotky hustoty</h2></div>
+        <hr/>
+        <div>
+            <p>The desired output units of the density values. By default, this is set to square kilometers or square miles based on the default units specified in your profile. If density values are very small, you can increase the size of the area units (for example, square meters to square kilometers) to return larger values. The values only scale the result.  
+
+            </p>
+        </div>
+    </div>
+    <div id="timeSlicing">
+        <div><h2>Vypočítat hustotu s využitím časových kroků (volitelné)</h2></div>
+        <hr/>
+        <div>
+            <p>Pokud vstupn&iacute; bodov&aacute; vrstva obsahuje časov&aacute; data, ve form&aacute;tu okamžit&yacute;ch dat, můžete prov&aacute;dět anal&yacute;zu pomoc&iacute; krokov&aacute;n&iacute; času. Při použit&iacute; času můžete nastavit tři parametry:
+                <ul>
+                    <li> <b>Interval časov&eacute;ho kroku</b>
+                    </li>
+                    <li> <b>Jak často se m&aacute; časov&yacute; krok opakovat</b>
+                    </li>
+                    <li> <b>Čas ke srovn&aacute;n&iacute; časov&yacute;ch kroků</b>
+                    </li>
+                </ul>
+                
+            </p>
+            <p>Představte si, že m&aacute;te data reprezentuj&iacute;c&iacute; rok v&nbsp;čase a chcete prov&eacute;st anal&yacute;zu pomoc&iacute; t&yacute;denn&iacute;ch kroků. Abyste tak učinili, nastav&iacute;te  <b>Interval časov&eacute;ho kroku</b> na <code>1 t&yacute;den</code>.
+            </p>
+            <p>Představte si, že m&aacute;te data reprezentuj&iacute;c&iacute; rok v&nbsp;čase a chcete prov&eacute;st anal&yacute;zu pomoc&iacute; prvn&iacute;ho t&yacute;dne v&nbsp;měs&iacute;ci. Abyste tak učinili, nastav&iacute;te  <b>Interval časov&eacute;ho kroku</b> na <code>1 t&yacute;den</code>, <b>Jak často se m&aacute; časov&yacute; krok opakovat</b> na <code>1 měs&iacute;c</code> a <b>Čas ke srovn&aacute;n&iacute; časov&yacute;ch kroků</b> na <code>1. leden ve 12:00</code>.
+            </p>
+        </div>
+    </div>
+    <div id="timeInterval">
+        <div><h2>Interval časového kroku</h2></div>
+        <hr/>
+        <div>
+            <p>Časov&yacute; interval použit&yacute; ke generov&aacute;n&iacute; časov&yacute;ch kroků. Interval časov&eacute;ho kroku může b&yacute;t použit samostatně nebo společně s parametry  <b>Jak často se m&aacute; časov&yacute; krok opakovat</b> nebo <b>Čas ke srovn&aacute;n&iacute; časov&yacute;ch kroků</b>.
+            </p>
+            <p>Pokud chcete vytvořit časov&eacute; d&iacute;ly, kter&eacute; se konaj&iacute; každ&eacute; ponděl&iacute; od 9 do 10 hodin,  <b>Interval časov&eacute;ho kroku</b> nastav&iacute;te na <code>1 hodinu</code>, <b>Jak často se m&aacute; časov&yacute; krok opakovat</b> na <code>1 t&yacute;den</code> a <b>Čas ke srovn&aacute;n&iacute; časov&yacute;ch kroků</b> na <code>9:00:00 v&nbsp;ponděl&iacute;</code>.
+            </p>
+        </div>
+    </div>
+    <div id="timeStep">
+        <div><h2>Jak často se má časový krok opakovat</h2></div>
+        <hr/>
+        <div>
+            <p> Krok použit&yacute; pro v&yacute;počet časov&eacute;ho &uacute;seku. Parametr <b>Jak často se m&aacute; časov&yacute; krok opakovat</b> se může použ&iacute;t samostatně nebo s parametry <b>Interval časov&eacute;ho kroku</b>, <b>Referenčn&iacute; čas</b> nebo <b>Interval časov&eacute;ho kroku</b> a <b>Čas ke srovn&aacute;n&iacute; časov&yacute;ch kroků</b>.
+            </p>
+            <p> Pokud chcete vytvořit časov&eacute; d&iacute;ly, kter&eacute; se konaj&iacute; každ&eacute; ponděl&iacute; od 9 do 10 hodin, <b>Interval časov&eacute;ho kroku</b> nastav&iacute;te na <code>1 hodinu</code>, <b>Jak často se m&aacute; časov&yacute; krok opakovat</b> na <code>1 t&yacute;den</code> a <b>Čas ke srovn&aacute;n&iacute; časov&yacute;ch kroků</b> na <code>9:00:00 v&nbsp;ponděl&iacute;</code>.
+            </p>
+        </div>
+    </div>
+    <div id="timeReference">
+        <div><h2>Čas ke srovnání časových kroků</h2></div>
+        <hr/>
+        <div>
+            <p>Datum a čas použit&eacute; pro srovn&aacute;n&iacute; dělen&iacute; času. Časov&eacute; kroky začnou v tento čas a budou pokračovat do minulosti. Pokud nen&iacute; vybr&aacute;n ž&aacute;dn&yacute; referenčn&iacute; čas, časov&eacute; kroky se srovnaj&iacute; k 1. lednu 1970. 
+            </p>
+            <p> Pokud chcete vytvořit časov&eacute; d&iacute;ly, kter&eacute; se konaj&iacute; každ&eacute; ponděl&iacute; od 9 do 10 hodin, <b>Interval časov&eacute;ho kroku</b> nastav&iacute;te na <code>1 hodinu</code>, <b>Jak často se m&aacute; časov&yacute; krok opakovat</b> na <code>1 t&yacute;den</code> a <b>Čas ke srovn&aacute;n&iacute; časov&yacute;ch kroků</b> na <code>9:00:00 v&nbsp;ponděl&iacute;</code>.
+            </p>
+        </div>
+    </div>
+    <div id="spatialReference">
+        <div><h2>SpatialReference (wkid)</h2></div>
+        <hr/>
+        <div>
+            <p>Jedn&aacute; se o dočasn&yacute; parametr pro předčasn&eacute; vyd&aacute;n&iacute; pro nastaven&iacute; souřadnicov&eacute;ho syst&eacute;mu zpracov&aacute;n&iacute;. Mnoho n&aacute;strojů pro velk&aacute; data vyžaduje, aby byl jako souřadnicov&yacute; syst&eacute;m pro zpracov&aacute;n&iacute; použit rovinn&yacute; souřadnicov&yacute; syst&eacute;m. Ve v&yacute;choz&iacute;m nastaven&iacute; n&aacute;stroj použije vstupn&iacute; souřadnicov&yacute; syst&eacute;m, ale pokud se jedn&aacute; o zeměpisn&yacute; souřadnicov&yacute; syst&eacute;m, n&aacute;stroj selže. Pro nastaven&iacute; rovinn&eacute;ho souřadnicov&eacute;ho syst&eacute;mu zadejte WKID. Např&iacute;klad  <b>Web Mercator</b> zad&aacute;te jako <code>3857</code>.
+            </p>
+        </div>
+    </div>
+    <div id="dataStore">
+        <div><h2>Zvolit datové úložiště</h2></div>
+        <hr/>
+        <div>
+            <p>V&yacute;sledky GeoAnalytics jsou ukl&aacute;d&aacute;ny do ArcGIS Data Store a jsou zobrazeny jako vrstva prvků v  Portal for ArcGIS. Ve vět&scaron;ině př&iacute;padů by v&yacute;sledky měly b&yacute;t uloženy do časoprostorov&eacute;ho datov&eacute;ho &uacute;loži&scaron;tě a toto je v&yacute;choz&iacute; nastaven&iacute;. V někter&yacute;ch př&iacute;padech je vhodn&eacute; uložit v&yacute;sledky do relačn&iacute;ho datov&eacute;ho &uacute;loži&scaron;tě. Důvody k uložen&iacute; v&yacute;sledků do relačn&iacute;ho datov&eacute;ho &uacute;loži&scaron;tě: 
+                <ul>
+                    <li>Použit&iacute; v&yacute;sledků mezi spolupracuj&iacute;c&iacute;mi port&aacute;ly.
+                    </li>
+                    <li>Povolen&iacute; funkc&iacute; synchronizace s v&yacute;sledky.
+                    </li>
+                </ul>
+                
+            </p>
+            <p>Relačn&iacute; datov&eacute; &uacute;loži&scaron;tě byste použ&iacute;vat neměli, pokud oček&aacute;v&aacute;te n&aacute;růst v&yacute;sledků GeoAnalytics a potřebujete využ&iacute;t v&yacute;hod časoprostorov&eacute;ho &uacute;loži&scaron;tě Big Data ke zpracov&aacute;n&iacute; velk&yacute;ch objemů dat. 
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div><h2>Název výsledné vrstvy</h2></div>
+        <hr/>
+        <div>
+            <p> Toto je n&aacute;zev vrstvy, kter&aacute; se vytvoř&iacute; ve složce <b>Můj obsah</b> a přid&aacute; do mapy.  V&yacute;choz&iacute; n&aacute;zev se ř&iacute;d&iacute; n&aacute;zvem n&aacute;stroje a n&aacute;zvem vstupn&iacute; vrstvy. Pokud vrstva již existuje, n&aacute;stroj selže.
+            </p>
+            <p>V&nbsp;rozbalovac&iacute;m seznamu  <b>Uložit v&yacute;sledek do</b> můžete zadat n&aacute;zev složky ve složce <b>Můj obsah</b>, do kter&eacute; se m&aacute; v&yacute;sledek uložit.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

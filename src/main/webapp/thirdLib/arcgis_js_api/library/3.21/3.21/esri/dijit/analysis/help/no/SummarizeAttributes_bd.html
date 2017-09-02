@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpInfoArr, helpEnvFilter, envContent, hideEnvClass, hideNodes;
+                helpInfo = window.location.hash.substring(1);
+                    if(helpInfo.indexOf("-")) {
+                        helpInfoArr = helpInfo.split("-");
+                        helpId = helpInfoArr[0];
+                        helpEnvFilter = helpInfoArr[1];
+                    }
+                    else {
+                        helpId = helpInfo;
+                    }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                    hideEnvClass = (helpEnvFilter === "OnlineOnly"? "PortalOnly": "OnlineOnly");
+                    if(document.getElementsByClassName) {
+                        hideNodes = document.getElementsByClassName(hideEnvClass);
+                    }
+                    else {
+                        hideNodes = document.querySelectorAll(hideEnvClass);
+                    }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                    }
+                    for(i=0; i < hideNodes.length; i++) {
+                        hideNodes[i].style.display ="none";
+                    }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="regularsize">
+        <h2>Summer attributter</h2><p/>
+        <h2><img src="../images/GUID-F64B533F-B0BB-4519-9F31-BCF814084999-web.png" alt="Summer attributter"></h2>
+        <hr/>
+    <p>Dette verkt&oslash;yet oppsummerer alle de samsvarende verdiene i ett eller flere felter og beregner statistikk p&aring; dem. Den mest grunnleggende statistikken er antall geoobjekter som er blitt summert sammen, men du kan beregne mer avansert statistikk ogs&aring;. 
+
+    </p>
+    <p>La oss f.eks. si at du har punktgeoobjekter for butikklokasjoner med et felt som representerer  <i>DISTRICT_MANAGER_NAME</i> og du &oslash;nsker &aring; summere kaffesalget etter sjef. Du kan angi feltet <i>DISTRICT_MANAGER_NAME</i> som feltet &aring; l&oslash;se opp, og alle rader med data som representerer de enkelte sjefene, blir summert. Dette betyr at alle butikklokasjoner som administreres av Sjef1 vil bli summert i en rad med sammendragsstatistikk beregnet. I dette tilfellet blir statistikk som antallet butikker og summen av <i>TOTAL_SALES</i> for alle butikker som Sjef1 leder beregnet, i tillegg til andre sjefer som er oppf&oslash;rt i feltet <i>DISTRICT_MANAGER_NAME</i>.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div><h2>Velg inndataene som skal summeres</h2></div>
+        <hr/>
+        <div>
+            <p>Laget som inneholder feltene som blir summert.  
+            </p>
+            <p>I tillegg til &aring; velge et lag fra kartet kan du velge  <b>Bla gjennom lag</b>, som du finner nederst i rullegardinlisten, til &aring; bla deg frem til innholdet for et fildelingsdatasett for big data eller et geoobjektslag.
+            </p>
+        </div>
+    </div>
+    <div id="fields">
+        <div><h2>Velg feltene som skal summeres</h2></div>
+        <hr/>
+        <div>
+            <p>Liste over felter fra inndatalaget. De utvalgte feltene blir summert og brukt til &aring; beregne statistikk. Hvis du f.eks. velger et felt ved navn  <i>PropertyType</i> med verdier for kommersielle og boliger, blir alle feltene for bolig summert sammen, med beregnet summeringsstatistikk, og alle feltene for kommersielt blir summert sammen.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div><h2>Legg til statistikk (valgfritt)</h2></div>
+        <hr/>
+        <div>
+            <p> Du kan beregne statistikk p&aring; geoobjekter som er summert. P&aring; numeriske felt kan du beregne f&oslash;lgende:
+                <ul>
+                    <li>Antall &ndash; Beregner antall verdier som ikke er null. Kan brukes p&aring; numeriske felt eller strenger. Antallet for [null, 0, 2] er 2.
+                    </li>
+                    <li>Sum &ndash; Summen av numeriske verdier i et felt. Summen av [null, null, 3] er 3.
+                    </li>
+                    <li>Gjennomsnitt &ndash; Gjennomsnittet for numeriske verdier. Gjennomsnittet av [0, 2, null] er 1.
+                    </li>
+                    <li>Min &ndash; Minimumsverdien for et numerisk felt. Minimum av [0, 2, null] er 0. 
+                    </li>
+                    <li>Maks &ndash; Maksimumsverdien for et numerisk felt. Maksimumsverdien for [0, 2, null] er 2.
+                    </li>
+                    <li>Omr&aring;de &ndash; Omr&aring;det for et numerisk felt. Beregnes som den maksimale verdien minus minimumsverdien. Omr&aring;det av [0, null, 1] er 1. Omr&aring;det av [null, 4] er 0.
+                    </li>
+                    <li>Varians &ndash; Variansen for et numerisk felt i et spor. Variansen for [1] er null. Variansen for [null, 1,1,1] er 1.
+                    </li>
+                    <li>Standardavvik &ndash; Standardavviket for et numerisk felt. Standardavviket for [1] er null. Standardavviket for [null, 1,1,1] er 1. 
+                    </li>
+                </ul>
+                
+            </p>
+            <p>P&aring; strengfelter kan du beregne f&oslash;lgende:
+                <ul>
+                    <li>Antall &ndash; Antallet strenger som ikke er null.
+                    </li>
+                    <li>Noen &ndash; Denne statistikken er en tilfeldig pr&oslash;ve av en strengverdi i det spesifiserte feltet.
+                    </li>
+                </ul>
+                All statistikk beregnes p&aring; ikke-nullverdier. Resultatlaget inneholder et nytt felt for hver beregnet statistikk. Du kan legge til flere statistikker ved &aring; velge et attributt og statistikk. 
+            </p>
+        </div>
+    </div>
+    <div id="dataStore">
+        <div><h2>Velg datalager</h2></div>
+        <hr/>
+        <div>
+            <p>GeoAnalytics-resultater lagres i et ArcGIS Data Store og vises som et geoobjektslag i  Portal for ArcGIS. Resultatene b&oslash;r i de fleste tilfeller lagres i et spatiotemporalt datalager, og dette er standarden. I enkelte tilfeller er det en god l&oslash;sning &aring; lagre resultatene i relasjonsdatalageret. Du b&oslash;r lagre resultatene i relasjonsdatalageret av f&oslash;lgende &aring;rsaker: 
+                <ul>
+                    <li>Du kan bruke resultatene i portal til portal-samarbeid.
+                    </li>
+                    <li>Du kan aktivere synkroniseringsfunksjoner for resultatene dine.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div><h2>Navn på resultatlag</h2></div>
+        <hr/>
+        <div>
+            <p> Dette er navnet p&aring; laget som vil bli laget i <b>Mitt Innhold</b> og lagt til i kartet. Standardnavnet er basert p&aring; verkt&oslash;ynavnet og navnet p&aring; inndatalaget. Hvis laget allerede eksisterer, vil verkt&oslash;yet mislykkes.
+            </p>
+            <p>Bruk rullegardinlisten  <b>Lagre resultat</b> i til &aring; angi navnet p&aring; en mappe i <b>Mitt innhold</b> som resultatene skal lagres i.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

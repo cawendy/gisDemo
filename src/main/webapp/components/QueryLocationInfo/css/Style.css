@@ -1,0 +1,37 @@
+.locationSelector{
+    MARGIN-LEFT: 0%;
+    /*left: 380px;/*680*/
+    top: 10px;
+    position: absolute;
+    border-radius: 3px;
+    background-color: #FFFFFF;
+    /*box-shadow: 2px 2px 8px 1px rgba(185, 185, 185, 0.93);*/
+    z-index: 100;
+}
+.title{
+    color:red;
+}
+
+.dijitToggleButton, .dijitButton, .dijitDropDownButton, .dijitComboButton {
+    margin: 0 0 0 2px;
+    vertical-align: middle;
+}
+
+.claro .dijitButton .dijitButtonNode, .claro .dijitDropDownButton .dijitButtonNode, .claro .dijitComboButton .dijitButtonNode, .claro .dijitToggleButton .dijitButtonNode {
+    border: 1px solid #759dc0;
+    padding: 1px 2px 2px 1px;
+    color: black;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    background-color: #bcd8f4;
+    background-image: url("form/images/buttonEnabled.png");
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(#ffffff 0px, rgba(255, 255, 255, 0) 3px, rgba(255, 255, 255, 0.75) 100%);
+    background-image: -webkit-linear-gradient(#ffffff 0px, rgba(255, 255, 255, 0) 3px, rgba(255, 255, 255, 0.75) 100%);
+    background-image: -o-linear-gradient(#ffffff 0px, rgba(255, 255, 255, 0) 3px, rgba(255, 255, 255, 0.75) 100%);
+    background-image: linear-gradient(#ffffff 0px, rgba(255, 255, 255, 0) 3px, rgba(255, 255, 255, 0.75) 100%);
+    _background-image: none;
+}

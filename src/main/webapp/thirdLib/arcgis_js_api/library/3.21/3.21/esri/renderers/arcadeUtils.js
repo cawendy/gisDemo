@@ -1,0 +1,6 @@
+// All material copyright ESRI, All Rights Reserved, unless otherwise specified.
+// See http://js.arcgis.com/3.21/esri/copyright.txt for details.
+//>>built
+define("esri/renderers/arcadeUtils",["dojo/_base/lang","dojo/_base/array","dojo/has","../kernel","../arcade/arcade"],function(g,h,m,n,e){var k={vars:{$feature:"any",$view:"any"}},l=/^\$feature\./i,f={createSyntaxTree:function(b,a){a=a||g.clone(k);var c;try{c=b?e.parseScript(b,a):null}catch(d){c=null}return c},createFunction:function(b,a){a=a||g.clone(k);var c="string"===typeof b?f.createSyntaxTree(b,a):b,d;try{d=c?e.compileScript(c,a):null}catch(p){d=null}return d},createExecContext:function(b,a){return{vars:{$feature:e.constructFeature(b),
+$view:a&&a.view},spatialReference:a&&a.sr}},evalSyntaxTree:function(b,a){var c;try{c=e.executeScript(b,a,a.spatialReference)}catch(d){c=null}return c},executeFunction:function(b,a){var c;try{c=b?b(a,a.spatialReference):null}catch(d){c=null}return c},extractFieldNames:function(b,a){var c="string"===typeof b?f.createSyntaxTree(b,a):b,c=e.extractFieldLiterals(c),d=[];h.forEach(c,function(a){l.test(a)&&(a=a.replace(l,""),d.push(a))});d.sort();return h.filter(d,function(a,b){return 0===b||d[b-1]!==a})},
+dependsOnView:function(b){return e.referencesMember(b,"$view")}};m("extend-esri")&&g.setObject("renderer.arcadeUtils",f,n);return f});

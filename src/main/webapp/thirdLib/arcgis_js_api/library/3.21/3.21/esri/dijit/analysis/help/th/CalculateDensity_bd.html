@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpInfoArr, helpEnvFilter, envContent, hideEnvClass, hideNodes;
+                helpInfo = window.location.hash.substring(1);
+                    if(helpInfo.indexOf("-")) {
+                        helpInfoArr = helpInfo.split("-");
+                        helpId = helpInfoArr[0];
+                        helpEnvFilter = helpInfoArr[1];
+                    }
+                    else {
+                        helpId = helpInfo;
+                    }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                    hideEnvClass = (helpEnvFilter === "OnlineOnly"? "PortalOnly": "OnlineOnly");
+                    if(document.getElementsByClassName) {
+                        hideNodes = document.getElementsByClassName(hideEnvClass);
+                    }
+                    else {
+                        hideNodes = document.querySelectorAll(hideEnvClass);
+                    }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                    }
+                    for(i=0; i < hideNodes.length; i++) {
+                        hideNodes[i].style.display ="none";
+                    }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="largesize">
+        <h2>คำนวณความหนาแน่น</h2><p/>
+        <h2><img src="../images/GUID-38AD3C19-0400-4E5A-9282-BDE42F2BBFC1-web.png" alt="Calculate Density"></h2>
+        <hr/>
+    <p>The Calculate Density tool creates a density map from point features by spreading known quantities of some phenomenon (represented as attributes of the points) across the map. The result is a layer of areas classified from least dense to most dense.   
+
+    </p>
+    <p>For point input, each point should represent the location of some event or incident, and the result layer represents a count of the incident per unit area.  A higher density value in a new location means that there are more points near that location.  In many cases, the result layer can be interpreted as a risk surface for future events. For example, if the input points represent locations of lightning strikes, the result layer can be interpreted as a risk surface for future lightning strikes.
+    </p>
+    <p>Other use cases of this tool include the following:
+        <ul>
+            <li>Creating crime-density maps to help police departments properly allocate resources to high crime areas.
+            </li>
+            <li>Calculating densities of hospitals within a county.  The result layer will show areas with high and low accessibility to hospitals, and this information can be used to decide where new hospitals should be built.
+            </li>
+            <li>Identifying areas that are at high risk of forest fires based on historical locations of forest fires.
+            </li>
+            <li>Locating communities that are far from major highways in order to plan where new roads should be constructed.
+            </li>
+        </ul>
+        
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div><h2>เลือกชั้นจุดที่จะคำนวณความหนาแน่น</h2></div>
+        <hr/>
+        <div>
+            <p>The point layer on which the density will be calculated.
+            </p>
+            <p>นอกเหนือจากการเลือกชั้นข้อมูลจากแผนที่คุณสามารถเลือก <b>เบราว์เลเยอร์</b> ที่ด้านล่างของรายการแบบเลื่อนลงเพื่อเรียกดูเนื้อหาของคุณสำหรับชุดข้อมูลชุดข้อมูลข้อมูลขนาดใหญ่หรือฟีเจอร์เลเยอร์
+            </p>
+        </div>
+    </div>
+    <div id="fields">
+        <div><h2>เลือกฟิลด์อย่างน้อยหนึ่งฟิลด์ เพื่อคำนวณความหนาแน่น (ตัวเลือก)</h2></div>
+        <hr/>
+        <div>
+            <p>Provide  one or more fields specifying the number of incidents at each location.  For example, if you have points that represent cities, you can use a field representing the population of the city as the count field, and the resulting population density layer will calculate larger population densities near cities with larger populations.
+            </p>
+            <p>The density for the count of points will always be calculated.   If no fields are selected, each location will be assumed to represent a single count.
+            </p>
+        </div>
+    </div>
+    <div id="binType">
+        <div><h2>เลือกรูปทรงถัง</h2></div>
+        <hr/>
+        <div>
+            <p>The shape of bins that points are aggregated into and used for the density calculation.
+            </p>
+            <p>การวิเคราะห์โดยใช้  <b>สี่เหลี่ยม</b>หรือ <b>หกเหลี่ยม</b>บินต้องการระบบพิกัดอ้างอิง. คุณสามารถตั้งค่า <b>ระบบพิกัดอ้างอิงในการประมวลผล</b> ใน <b>การวิเคราะห์เชิงสิ่งแวดล้อม</b> หากระบบพิกัดอ้างอิงในการประมวลผลของคุณไม่ได้รับการตั้งค่าให้เป็นระบบพิกัดที่คาดการณ์ไว้คุณจะได้รับแจ้งให้ตั้งค่าเมื่อคุณ <b>วิเคราะห์ผล</b>
+            </p>
+        </div>
+    </div>
+    <div id="binSizing">
+        <div><h2>เลือกขนาดช่องสำหรับการรวบรวมข้อมูล</h2></div>
+        <hr/>
+        <div>
+            <p>The size of the bins generated. For a square bin, the size represents the height of the square. For hexagon, the size represents the height of the hexagon (from parallel sides).
+            </p>
+        </div>
+    </div>
+    <div id="weight">
+        <div><h2>เลือกขนาดถังสำหรับการคำนวณความหนาแน่น</h2></div>
+        <hr/>
+        <div>
+            <p>The type of weighting applied to the density calculation. There are two options:
+                <ul>
+                    <li> <b>Uniform</b>&mdash;This calculates a magnitude per area.
+                    </li>
+                    <li> <b>Kernel</b>&mdash;Applies a kernel function to fit a smooth tapered surface to each point.
+                    </li>
+                </ul>
+                
+            </p>
+        </div>
+    </div>
+    <div id="neighborhood">
+        <div><h2>เลือกขนาดพื้นที่ใกล้เคียง</h2></div>
+        <hr/>
+        <div>
+            <p>The size of the area used to calculate the density. The neighborhood size must be larger than the bin size.
+            </p>
+        </div>
+    </div>
+    <div id="areaUnits">
+        <div><h2>เลือกหน่วยแสดงผลสำหรับความหนาแน่น</h2></div>
+        <hr/>
+        <div>
+            <p>The desired output units of the density values. By default, this is set to square kilometers or square miles based on the default units specified in your profile. If density values are very small, you can increase the size of the area units (for example, square meters to square kilometers) to return larger values. The values only scale the result.  
+
+            </p>
+        </div>
+    </div>
+    <div id="timeSlicing">
+        <div><h2>คำนวณผลความหนาแน่นโดยใช้เวลา ขั้นตอน  (เป็นตัวเลือก)</h2></div>
+        <hr/>
+        <div>
+            <p>หากเวลาเปิดใช้งานในชั้นข้อมูลจุดอินพุต เป็นแบบเวลาในทันที คุณสามารถวิเคราะห์โดยใช้ขั้นเวลา มีสามพารามิเตอร์ ที่คุณสามารถตั้งค่า เมื่อคุณใช้ข้อมูลเวลา:
+                <ul>
+                    <li> <b>ช่วงระหว่างของขั้นตอนเวลา</b>
+                    </li>
+                    <li> <b>จำนวนครั้งที่ให้ทำซ้ำตามช่วงเวลา </b>
+                    </li>
+                    <li> <b>เวลาที่ใช้ในการปรับช่วงเวลา</b>
+                    </li>
+                </ul>
+                
+            </p>
+            <p>ลองนึกภาพคุณมีข้อมูลที่แสดงรายปี และคุณต้องการวิเคราะห์โดยใช้ขั้นรายสัปดาห์ เมื่อต้องการทำเช่นนี้คุณจะตั้งค่า  <b>ช่วงขั้นเวลา</b> เป็น <code>1 สัปดาห์</code>
+            </p>
+            <p>ลองนึกภาพคุณมีข้อมูลที่แสดงรายปี และคุณต้องการวิเคราะห์โดยใช้สัปดาห์แรกของเดือน เมื่อต้องการทำเช่นนี้คุณจะตั้งค่า <b>ช่วงขั้นเวลา</b> เป็น <code>1 สัปดาห์</code>, <b>จำนวนครั้งที่ให้ทำซ้ำตามช่วงเวลา </b> เป็น <code>1 เดือน</code>, และ <b>เวลาที่ใช้ในการปรับช่วงเวลา</b> เป็น <code>1 มกราคม เวลา 12:00 น.</code>.
+            </p>
+        </div>
+    </div>
+    <div id="timeInterval">
+        <div><h2>ช่วงขั้นเวลา</h2></div>
+        <hr/>
+        <div>
+            <p>ช่วงเวลาที่ใช้ในการสร้างขั้นเวลา ช่วงขั้นเวลาอาจใช้เพียงค่าเดียว หรือ ใช้ร่วมกับ  <b>จำนวนครั้งที่ให้ทำซ้ำตามช่วงเวลา </b> หรือ <b>เวลาที่ใช้ในการปรับช่วงเวลา</b> พารามิเตอร์
+            </p>
+            <p>หากคุณต้องการสร้างส่วนของเวลาที่เกิดขึ้นทุกวันจันทร์ตั้งแต่เวลา 9:00 น. ถึง 10:00 น. <b>ช่วงขั้นเวลา</b> ควรเป็น <code>1 ชั่วโมง</code>, <b>จำนวนครั้งที่ให้ทำซ้ำตามช่วงเวลา</b> ควรเป็น <code>1 สัปดาห์</code>, และ <b>เวลาที่ใช้ในการปรับช่วงเวลา</b> ควรเป็น <code>9:00:00 น. ในวันจันทร์</code>
+            </p>
+        </div>
+    </div>
+    <div id="timeStep">
+        <div><h2>จำนวนครั้งที่ให้ทำซ้ำตามช่วงเวลา</h2></div>
+        <hr/>
+        <div>
+            <p> ขั้นตอนที่ใช้สำหรับการคำนวณเวลา <b>จำนวนครั้งที่ให้ทำซ้ำตามช่วงเวลา </b> อาจใช้เพียงค่าเดียว หรือ ใช้ร่วมกับ <b>ช่วงขั้นเวลา</b>, ด้วย <b>เวลาอ้างอิง</b>, หรือใช้ทั้ง <b>ช่วงขั้นเวลา</b> และ <b>เวลาที่ใช้ในการปรับช่วงเวลา</b>.
+            </p>
+            <p> หากคุณต้องการสร้างส่วนของเวลาที่เกิดขึ้นทุกวันจันทร์ตั้งแต่เวลา 9:00 น. ถึง 10:00 น. <b>ช่วงขั้นเวลา</b> ควรเป็น <code>1 ชั่วโมง</code>, <b>จำนวนครั้งที่ให้ทำซ้ำตามช่วงเวลา</b> ควรเป็น <code>1 สัปดาห์</code>, และ <b>เวลาที่ใช้ในการปรับช่วงเวลา</b> ควรเป็น <code>9:00:00 น. ในวันจันทร์</code>.
+            </p>
+        </div>
+    </div>
+    <div id="timeReference">
+        <div><h2>เวลาที่ใช้ในการปรับช่วงเวลา</h2></div>
+        <hr/>
+        <div>
+            <p>วันที่และเวลาที่ใช้ในการจัดเวลา ขั้นเวลาจะเริ่มต้น และย้อนกลับไปเรื่อย ๆ นับเวลาจากนี้ ถ้าไม่มีการอ้างอิงเวลา ขั้นเวลาจะปรับไปเป็น วันที่ 1 มกราคม 1970 
+            </p>
+            <p> หากคุณต้องการสร้างส่วนของเวลาที่เกิดขึ้นทุกวันจันทร์ตั้งแต่เวลา 9:00 น. ถึง 10:00 น. <b>ช่วงขั้นเวลา</b> ควรเป็น <code>1 ชั่วโมง</code>, <b>จำนวนครั้งที่ให้ทำซ้ำตามช่วงเวลา</b> ควรเป็น <code>1 สัปดาห์</code>, และ <b>เวลาที่ใช้ในการปรับช่วงเวลา</b> ควรเป็น <code>9:00:00 น. ในวันจันทร์</code>.
+            </p>
+        </div>
+    </div>
+    <div id="spatialReference">
+        <div><h2>ระบบพิกัด (wkid)</h2></div>
+        <hr/>
+        <div>
+            <p>นี่เป็นพารามิเตอร์ชั่วคราวก่อนวางจำหน่ายในการตั้งค่าการประมวลผลเชิงพื้นที่อ้างอิง หลายเครื่องมือข้อมูลขนาดใหญ่จำเป็นต้องให้ระบบพิกัดที่คาดการณ์จะใช้เป็นข้อมูลอ้างอิงสำหรับการประมวลผลเชิงพื้นที่ โดยค่าเริ่มต้นเครื่องมือจะใช้การป้อนข้อมูลระบบพิกัด แต่จะล้มเหลวถ้ามันเป็นระบบพิกัดทางภูมิศาสตร์ ในการตั้งค่าระบบพิกัดคาดการณ์ป้อน WKID ตัวอย่างเช่น, <b>Web Mercator</b> จะถูกป้อนเป็น <code>3857</code>.
+            </p>
+        </div>
+    </div>
+    <div id="dataStore">
+        <div><h2>เลือกที่จัดเก็บข้อมูล</h2></div>
+        <hr/>
+        <div>
+            <p>GeoAnalytic ผลลัพธ์จะถูกเก็บไว้ใน ArcGIS Data Store และถูกสร้างเป็นชั้นข้อมูลฟีเจอร์ ใน   Portal for ArcGIS ในกรณีส่วนใหญ่ ผลลัพธ์ควรเก็บไว้ในที่เก็บข้อมูล spatiotemporal และใช้เป็นค่าเริ่มต้นด้วย ในบางกรณีการบันทึกผลลัพธ์ ไปยังที่เก็บข้อมูลเชิงสัมพันธ์เป็นตัวเลือกที่ดี ต่อไปนี้คือเหตุผลที่คุณอาจต้องการจัดเก็บผลลัพธ์ไว้ ในการเก็บข้อมูลเชิงสัมพันธ์: 
+                <ul>
+                    <li>มีการใช้งานผลลัพธ์ในพอร์ทัล เพื่อใช้กับพอร์ทัลแบบทำงานร่วมกัน
+                    </li>
+                    <li>เปิดใช้งานความสามารถในการซิงค์กับผลลัพธ์ของคุณ
+                    </li>
+                </ul>
+                
+            </p>
+            <p>คุณไม่ควรใช้ที่เก็บข้อมูลเชิงสัมพันธ์ ถ้าคุณคาดว่าจะนำผลลัพธ์จาก GeoAnalytics ของคุณไปใช้ประโยชน์เพิ่มขึ้นจากความสามารถในการจัดเก็บข้อมูลขนาดใหญ่ของ spatiotemporal เพื่อจัดการกับข้อมูลจำนวนมาก 
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div><h2>ชื่อของชั้นข้อมูลผลลัพธ์</h2></div>
+        <hr/>
+        <div>
+            <p> เป็นชื่อชั้นข้อมูลที่จะถูกสร้างใน <b>เนื้อหาของฉัน</b> และเพิ่มเข้าไปในแผนที่ ชื่อเริ่มต้นจะขึ้นอยู่กับชื่อเครื่องมือและชื่อชั้นข้อมูลอินพุท ถ้าชั้นข้อมูลมีอยู่แล้วเครื่องมือจะล้มเหลว
+            </p>
+            <p>ใช้  <b>บันทึกผลลัพธ์ใน</b> รายการตัวเลือก เพื่อระบุชื่อของโฟล์เดอร์ใน <b>เนื้อหาของฉัน</b> เมื่อบันทึกผล
+            </p>
+        </div>
+    </div>
+</div>
+</html>

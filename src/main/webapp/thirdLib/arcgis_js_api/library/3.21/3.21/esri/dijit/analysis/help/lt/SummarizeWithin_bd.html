@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpInfoArr, helpEnvFilter, envContent, hideEnvClass, hideNodes;
+                helpInfo = window.location.hash.substring(1);
+                    if(helpInfo.indexOf("-")) {
+                        helpInfoArr = helpInfo.split("-");
+                        helpId = helpInfoArr[0];
+                        helpEnvFilter = helpInfoArr[1];
+                    }
+                    else {
+                        helpId = helpInfo;
+                    }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                    hideEnvClass = (helpEnvFilter === "OnlineOnly"? "PortalOnly": "OnlineOnly");
+                    if(document.getElementsByClassName) {
+                        hideNodes = document.getElementsByClassName(hideEnvClass);
+                    }
+                    else {
+                        hideNodes = document.querySelectorAll(hideEnvClass);
+                    }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                    }
+                    for(i=0; i < hideNodes.length; i++) {
+                        hideNodes[i].style.display ="none";
+                    }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="regularsize">
+        <h2>Sumuoti viduje</h2><p/>
+        <h2><img src="../images/GUID-90E0CB1F-EB97-4752-B2EE-452B7B45475E-web.png" alt="Sumuoti viduje"></h2>
+        <hr/>
+    <p>Įrankis randa elementus (ar jų dalis), esančius pirmojo įvesties sluoksnio plotų ribose.  
+        <ul>
+            <li>Atsižvelgiant į baseino ribas ir žemėnaudos ribų sluoksnį, apskaičiuoti kiekvieno baseino bendrą žemėnaudos tipo plotą. 
+            </li>
+            <li>Turint sklypų ir savivaldybių sluoksnius, apskaičiuoti neužstatytų sklypų kiekvienos savivaldybės ribose skaičių.
+            </li>
+        </ul>
+        
+    </p>
+    <p>Jei  <b>Naudoti esamą žemėlapio aprėptį</b> pažymėta, bus analizuojami tik į esamo žemėlapio aprėptį patenkantys įvesties ir sumuojamo sluoksnio elementai.  Jei nepažymėta, bus analizuojami visi abiejų sluoksnių (įvesties sluoksnio ir sumuojamo sluoksnio) elementai, net jei jie nepatenka į esamo žemėlapio aprėpties ribas.
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="sumWithinLayer">
+        <div><h2>Pasirinkite plotų sluoksnį, kurio ribose sumuoti kitus elementus</h2></div>
+        <hr/>
+        <div>
+            <p>Plotų sluoksnis, kuris bus naudojamas elementams, patenkantiems į jo ribas, sumuoti. Galite pasirinkti sumuoti pateikiamame plotiniame sluoksnyje arba kvadratinėse ar &scaron;e&scaron;iakampėse teritorijose, generuojamose paleidus įrankį. Generuojant  <b>kvadratines</b> teritorijas, nurodyti skaičiai ir vienetai apibrėžia kvadrato ilgį ir plotį. Generuojant <b>&scaron;e&scaron;iakampes</b> teritorijas, nurodyti skaičiai ir vienetai apibrėžia atstumą tarp lygiagrečių kra&scaron;tinių.
+            </p>
+            <p>Analizė naudojant  <b>kvadrato</b> arba <b>&scaron;e&scaron;iakampio</b> formos daugiakampius reikalauja projekcinės koordinačių sistemos. Galite nustatyti <b>Apdorojamą koordinačių sistemą</b> <b>analizės aplinkose</b>. Jei jūsų apdorojama koordinačių sistema nenustatyta kaip projekcinė koordinačių sistema, būsite paraginti nustatyti ją, kai <b>vykdysite analizę</b>.
+            </p>
+            <p>Galite ne tik nurodyti sluoksnį i&scaron; žemėlapio, bet ir apačioje pasirinkti  <b>Nar&scaron;yti sluoksnius</b>, kad galėtumėte turinyje nar&scaron;yti didelių duomenų rinkinio arba elemento sluoksnio.
+            </p>
+        </div>
+    </div>
+    <div id="summaryLayer">
+        <div><h2>Pasirinkite sluoksnį sumavimui</h2></div>
+        <hr/>
+        <div>
+            <p>Bus sumuojami &scaron;io sluoksnio elementai, kurie patenka į auk&scaron;čiau nurodyto įvesties sluoksnio elementų ar daugiakampių ribas. 
+            </p>
+            <p>Galite ne tik nurodyti sluoksnį i&scaron; žemėlapio, bet ir apačioje pasirinkti  <b>Nar&scaron;yti sluoksnius</b>, kad galėtumėte turinyje nar&scaron;yti didelių duomenų rinkinio arba elemento sluoksnio.
+            </p>
+        </div>
+    </div>
+    <div id="inputBins">
+        <div><h2>Pasirinkite atstumą, pagal kurį bus generuojami daugiakampiai ir agreguojami elementai</h2></div>
+        <hr/>
+        <div>
+            <p>Atstumas, naudojamas generuojant daugiakampius.  
+            </p>
+            <p>Reikia nustatyti  <b>Daugiakampio dydį</b>, jei generuojami daugiakampiai, arba <b>Plotų sluoksnį</b>.
+            </p>
+        </div>
+    </div>
+    <div id="timeSlicing">
+        <div><h2>Agreguoti naudojant laikotarpius (neprivaloma)</h2></div>
+        <hr/>
+        <div>
+            <p>Jei įvesties ta&scaron;kų sluoksnis yra susietas su laiku ir jo tipas yra &bdquo;I&scaron;kart&ldquo;, galite analizuoti naudodami laiko žingsnius. Naudodami laiko žymas, galite nustatyti tris parametrus:
+                <ul>
+                    <li> <b>Laiko žingsnio intervalas</b>
+                    </li>
+                    <li> <b>Kaip dažnai norite kartoti laiko žingsnį</b>
+                    </li>
+                    <li> <b>Laikas, su kuriuo sujungti laiko žingsnius</b>
+                    </li>
+                </ul>
+                
+            </p>
+            <p>Tarkime, jūs turite duomenų, kurie apima metus, ir norite juos i&scaron;analizuoti i&scaron;skaidydami į savaitės trukmės žingsnius. Norėdami tai padaryti, parinktį  <b>Laiko žingsnio intervalas</b> nustatykite kaip <code>1 savaitė</code>.
+            </p>
+            <p>Tarkime, jūs turite duomenų, kurie apima metus, ir norite juos i&scaron;analizuoti naudodami pirmąją mėnesių savaitę. Norėdami tai padaryti, parinktį  <b>Laiko žingsnio intervalas</b> nustatykite kaip <code>1 savaitė</code>, <b>Kaip dažnai norite kartoti laiko žingsnį</b> nustatykite kaip <code>1 mėnuo</code>, o <b>Laikas, su kuriuo sujungti laiko žingsnius</b> &ndash; <code>sausio 1 d, 12:00</code>.
+            </p>
+        </div>
+    </div>
+    <div id="timeInterval">
+        <div><h2>Laiko intervalas, į kurį agreguojami elementai</h2></div>
+        <hr/>
+        <div>
+            <p>Laiko intervalas, naudojamas generuojant laiko žingsnius. Laiko žingsnio intervalas gali būti naudojamas vienas arba su parametru  <b>Kaip dažnai norite kartoti laiko žingsnį</b> arba <b>Laikas, su kuriuo sujungti laiko žingsnius</b>.
+            </p>
+            <p>Jei norite sukurti laiko skiltis, apimančias kiekvieną pirmadienį nuo 9:00 iki 10:00,  <b>Laiko žingsnio intervalas</b> turi būti nustatytas kaip <code>1 valanda</code>, <b>Kaip dažnai norite kartoti laiko žingsnį</b> &ndash; <code>1 savaitė</code>, o <b>Laikas, su kuriuo sujungti laiko žingsnius</b> &ndash; <code>pirmadienis, 9:00:00</code>.
+            </p>
+        </div>
+    </div>
+    <div id="timeStep">
+        <div><h2>Laiko etapas, į kurį agreguojami elementai</h2></div>
+        <hr/>
+        <div>
+            <p> Žingsnis, naudojamas apskaičiuojant laiko skiltį. Parinktis <b>Kaip dažnai norite kartoti laiko žingsnį</b> gali būti naudojama viena arba kartu su parinktimis <b>Laiko žingsnio intervalas</b>, <b>Nuorodos laikas</b> arba abiem <b>Laiko žingsnio intervalas</b> ir <b>Laikas, su kuriuo sujungti laiko žingsnius</b>.
+            </p>
+            <p> Jei norite sukurti laiko skiltis, apimančias kiekvieną pirmadienį nuo 9:00 iki 10:00, <b>Laiko žingsnio intervalas</b> turi būti nustatytas kaip <code>1 valanda</code>, <b>Kaip dažnai norite kartoti laiko žingsnį</b> &ndash; <code>1 savaitė</code>, o <b>Laikas, su kuriuo sujungti laiko žingsnius</b> &ndash; <code>pirmadienis, 9:00:00</code>.
+            </p>
+        </div>
+    </div>
+    <div id="timeReference">
+        <div><h2>Nuorodos laikas, pagal kurį bus jungiamos laiko skiltys</h2></div>
+        <hr/>
+        <div>
+            <p>Data ir laikas, naudojami jungiant laiko skiltis. Laiko žingsniai prasidės ir tęsis atbuline eiga nuo &scaron;io laiko. Jei nepasirinktas joks nuorodos laikas, laiko žingsniai bus jungiami nuo 1970 m. sausio 1 d. 
+            </p>
+            <p> Jei norite sukurti laiko skiltis, apimančias kiekvieną pirmadienį nuo 9:00 iki 10:00, <b>Laiko žingsnio intervalas</b> turi būti nustatytas kaip <code>1 valanda</code>, <b>Kaip dažnai norite kartoti laiko žingsnį</b> &ndash; <code>1 savaitė</code>, o <b>Laikas, su kuriuo sujungti laiko žingsnius</b> &ndash; <code>pirmadienis, 9:00:00</code>.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div><h2>Pridėti statistiką (pasirinktinis nustatymas)</h2></div>
+        <hr/>
+        <div>
+            <p> Galite apskaičiuoti susumuotų elementų statistiką. Naudodami skaitinius laukus, galite apskaičiuoti:
+                <ul>
+                    <li>Skaičius &ndash; apskaičiuojamas nenulinių reik&scaron;mių skaičius. Galima naudoti skaitiniams laukams arba eilutėms. [nulinis, 0, 2] skaičius yra 2.
+                    </li>
+                    <li>Suma &ndash; lauke nurodytų skaitinių reik&scaron;mių suma. [nulinis, 0, 3] suma yra 3.
+                    </li>
+                    <li>Vidurkis &ndash; skaitinių reik&scaron;mių vidurkis. [0, 2, nulinis] vidurkis yra 1.
+                    </li>
+                    <li>Minimumas &ndash; skaitinio lauko reik&scaron;mės minimumas. [0, 2, nulinis] minimumas yra 0. 
+                    </li>
+                    <li>Maksimumas &ndash; skaitinio lauko reik&scaron;mės maksimumas. [0, 2, nulinis] maksimumas yra 2.
+                    </li>
+                    <li>Intervalas  &ndash; skaitinio lauko intervalas. Apskaičiuojamas i&scaron; maksimalios reik&scaron;mės atėmus minimalią reik&scaron;mę. [0, nulinis, 1] intervalas yra 1. [nulinis, 4] intervalas yra 0.
+                    </li>
+                    <li>Nuokrypis &ndash; skaitinio laiko nuokrypis trajektorijoje. [1] nuokrypis yra nulinis. [nulinis, 1,1,1] nuokrypis yra 1.
+                    </li>
+                    <li>Standartinis nuokrypis &ndash; skaitinio laiko standartinė deviacija. [1] standartinis nuokrypis yra nulinis. [nulinis, 1,1,1] standartinis nuokrypis yra 1. 
+                    </li>
+                </ul>
+                
+            </p>
+            <p>Naudodami tekstinius laukus, galite apskaičiuoti:
+                <ul>
+                    <li>Skaičius &ndash; nenulinių eilučių skaičius.
+                    </li>
+                    <li>Bet kokį rodiklį &ndash; &scaron;is statistinis rodiklis yra atsitiktinės eilutės reik&scaron;mės i&scaron; nurodyto lauko pavyzdys.
+                    </li>
+                </ul>
+                Visi statistiniai rodikliai apskaičiuojami tik su nenulinėmis reik&scaron;mėmis. Gautame sluoksnyje bus kiekvieno apskaičiuoto statistinio rodiklio naujas laukas. Pasirenkant atributą ir statistinį rodiklį, gali būti pridėtas neribotas statistinių rodiklių kiekis. 
+            </p>
+            <p>Visuose skaitiniuose laukuose be &scaron;ios statistikos bus apskaičiuojama proporcinė statistika:
+                <ul>
+                    <li>Skaičius &ndash; kiekvieno lauko skaičius padaugintas i&scaron; suvestinės sluoksnio proporcijos poligonuose. 
+                    </li>
+                    <li>Suma &ndash; kiekvieno lauko svertinių reik&scaron;mių suma. Kai taikomas svertas, yra suvestinės sluoksnio proporcija poligonuose.
+                    </li>
+                    <li>Vidurkis &ndash; svertinis reik&scaron;mių vidurkis kiekviename lauke. Kai taikomas svertas, yra suvestinės sluoksnio proporcija poligonuose.
+                    </li>
+                    <li>Minimalus &ndash; kiekvieno lauko minimalus svertinis vidurkis. Kai taikomas svertas, yra suvestinės sluoksnio proporcija poligonuose.
+                    </li>
+                    <li>Maksimalus &ndash; kiekvieno lauko maksimalus svertinis vidurkis. Kai taikomas svertas, yra suvestinės sluoksnio proporcija poligonuose.
+                    </li>
+                    <li>Diapazonas &ndash; skirtumas tarp maksimalaus ir minimalaus svertinio vidurkio.
+                    </li>
+                </ul>
+                
+            </p>
+            <p>Atsižvelgiant į sumuojamų elementų tipus, galima apskaičiuoti bendrą &scaron;alia esančių ta&scaron;kų skaičių, bendrą linijų ilgį ar bendrą plotą.
+            </p>
+        </div>
+    </div>
+    <div id="spatialReference">
+        <div><h2>SpatialReference (wkid)</h2></div>
+        <hr/>
+        <div>
+            <p>Tai yra laikinas parametras, naudojamas iki i&scaron;leidimo, kad būtų galima nustatyti apdorojimo erdvinę informaciją. Daugeliui didelių duomenų įrankių reikia naudoti projekcinę koordinačių sistemą kaip apdorojimo erdvinę informaciją. Pagal numatytuosius nustatymus įrankis naudos įvesties koordinačių sistemą, tačiau neveiks, jei tai bus geodrafinė koordinačių sistema. Norėdami nustatyti projekcinę koordinačių sistemą, įveskite WKID. Pavyzdžiui,  <b>Web Mercator</b> reik&scaron;mė būtų nurodyta <code>3857</code>.
+            </p>
+        </div>
+    </div>
+    <div id="dataStore">
+        <div><h2>Pasirinkti duomenų saugyklą</h2></div>
+        <hr/>
+        <div>
+            <p>GeoAnalytics rezultatai yra saugomi ArcGIS duomenų saugykloje ir rodomi kaip   Portal for ArcGIS elementų sluoksnis. Daugeliu atvejų rezultatai turi būti saugomi erdvinių-laiko duomenų saugykloje, ir tai yra numatytasis nustatymas. Kai kuriais atvejais galima rezultatus įra&scaron;yti į releacinę duomenų saugyklą. Toliau pateikiame priežastis, kodėl reikėtų rezultatus įray&scaron;i į releacinių duomenų saugyklą: 
+                <ul>
+                    <li>Rezultatus galima naudoti dviejuose susietuose portaluose.
+                    </li>
+                    <li>Rezultatus galima sinchronizuoti.
+                    </li>
+                </ul>
+                
+            </p>
+            <p>Nenaudokite releacinių duomenų saugyklos, jei jūsų GeoAnalytics rezultatų turėtų padaugėti, ir apdorojant didelius duomenų kiekius reikia pasinaudoti erdvinių-laiko didelių duomenų saugyklos galimybėmis. 
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div><h2>Rezultatų sluoksnio pavadinimas</h2></div>
+        <hr/>
+        <div>
+            <p> Tai sluoksnio, kuris bus sukurtas ir patalpintas dalyje <b>Mano turinys</b> ir įtrauktas į žemėlapį, pavadinimas. Numatytasis pavadinimas sukuriamas pagal įrankio ir įvesties sluoksnio pavadinimus. Jei toks sluoksnis jau yra, įrankis neveiks.
+            </p>
+            <p>I&scaron;&scaron;okančiame meniu  <b>Įra&scaron;yti rezultatą į</b> galite nurodyti <b>Mano turinys</b> esančio aplanko, kur bus įra&scaron;yti rezultatai, pavadinimą.
+            </p>
+        </div>
+    </div>
+</div>
+</html>

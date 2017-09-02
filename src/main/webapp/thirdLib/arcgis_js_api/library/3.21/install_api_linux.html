@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="last-modified" content="2017-07-03">
+  <title>Install notes for the ArcGIS API for JavaScript (Linux)</title>
+</head>
+<body>
+
+<h1 style="border-bottom: #dcdcdc 1px solid;">Install notes for the ArcGIS API for JavaScript&#153; (Linux)</h1>
+
+<p>For instructions on deploying the library on IIS for Windows, please see the <a href="install_api_windows.html">installation notes for Windows</a>.</p>
+
+<h2>Install the API on your Windows web server</h2>
+
+<p>The instructions below assume that you are installing the ArcGIS JavaScript API library in the following location on
+    an Apache Tomcat Web Server, "https://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/" where &lt;myserver&gt; is the domain name of your Web site and '8080' is the Web server port. 
+    If you use a different path and/or port number, adjust the instructions accordingly. 
+    After copying files to your Web server, you will need to edit some files to include the URL to the server and directory that you are planning to install to. </p>
+
+<h3>Step 1: Copy the files</h3>
+
+<ul>
+    <li>Copy <code>\arcgis_js_api\library</code> and all its contents from the zip file to your Web server.  In this example the files are copied to:<br/>
+        <code>&lt;apache_tomcat_home&gt;/webapps/arcgis_js_api/library</code>
+    </li>
+</ul>
+
+<h3>Step 2: Configure your API installation</h3>
+
+<p>ArcGIS JSAPI 3.21 contains two builds--a normal build and a compact build.  The compact build removes the Dojo Dijit dependancy and minimizes the non-essential ArcGIS JSAPI classes.  
+  Please see the <a href='https://developers.arcgis.com/javascript/3/jshelp/intro_accessapi.html#compact-build'>documentation</a> for more details.</p>
+
+<p>Your directions may differ depending on your server configuration or Web server, but the process is the same. 
+  Note: if your server doesn't support https, also change the <code>https</code> in the replaced string below to <code>http</code>.</p>
+
+<b>Configuration options for normal build:</b>
+<ol>
+    <li>Open <code>&lt;apache_tomcat_home&gt;\webapps\arcgis_js_api\library\3.21\3.21\init.js</code> in a text editor and search for the text <code>"https://[HOSTNAME_AND_PATH_TO_JSAPI]/dojo"</code>, and replace this text with <code>"https://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/3.21/dojo"</code></li>
+    <li>Open <code>&lt;apache_tomcat_home&gt;\webapps\arcgis_js_api\library\3.21\3.21\dojo\dojo.js</code> in a text editor and search for the text <code>"https://[HOSTNAME_AND_PATH_TO_JSAPI]/dojo"</code>, and replace this text with <code>"https://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/3.21/dojo"</code></li>
+</ol>
+
+<b>Configuration options for compact build:</b>
+<ol>
+    <li>Open <code>&lt;apache_tomcat_home&gt;\webapps\arcgis_js_api\library\3.21\3.21compact\init.js</code> in a text editor and search for the text <code>"https://[HOSTNAME_AND_PATH_TO_JSAPI]dojo"</code>, and replace this text with <code>"https://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/3.21compact/dojo"</code></li>
+    <li>Open <code>&lt;apache_tomcat_home&gt;\webapps\arcgis_js_api\library\3.21\3.21compact\dojo\dojo.js</code> in a text editor and search for the text <code>"https://[HOSTNAME_AND_PATH_TO_JSAPI]dojo"</code>, and replace this text with <code>"https://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/3.21compact/dojo"</code></li>
+</ol>
+
+<h2>Test the Install</h2>
+
+<p>Now you should be able to access the ArcGIS JavaScript library from your Web server using the following URL(s):</p>
+
+<pre>
+    https://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/3.21/init.js
+    https://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/3.21compact/init.js</pre>
+
+<p>Test your install.  You can use the following test code to validate your JSAPI library install.</p>
+
+<div style="background-color: #E5EFF7;">
+<pre>&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;
+    &lt;title&gt;Simple Map&lt;/title&gt;
+    &lt;link rel="stylesheet" type="text/css" href="https://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/3.21/esri/css/esri.css" /&gt;
+    &lt;script src="https://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/3.21/init.js"&gt;&lt;/script&gt;
+    &lt;style&gt;
+      html, body, #map {
+        height: 100%; width: 100%; margin: 0; padding: 0;
+      }
+    &lt;/style&gt;
+    &lt;script&gt;
+      require(["esri/map", 
+          "esri/layers/ArcGISTiledMapServiceLayer", 
+          "dojo/domReady!"],
+        function(Map, ArcGISTiledMapServiceLayer) {
+          var map = new Map("map");
+          //If you do not have Internet access then you will need to point this url to your own locally accessible tiled service.
+          var tiled = new ArcGISTiledMapServiceLayer("https://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer");
+          map.addLayer(tiled);
+        }
+      );       
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="map"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+</div>
+
+<h1>Change the ArcGIS Services Directory &quot;View In JavaScript&quot; URL</h1>
+
+<p> The Services Directory allows you to view Map and Image services using the JavaScript API. Set the following values in the rest-config.properties file to use the local install:</p>
+
+<pre>#JS API URLs
+jsapi.arcgis=http://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/3.21/
+jsapi.arcgis.sdk=http://&lt;myserver&gt;:8080/arcgis_js_sdk/sdk/
+jsapi.arcgis.css=http://&lt;myserver&gt;:8080/arcgis_js_api/library/3.21/3.21/dijit/themes/tundra/tundra.css
+</pre>
+
+<p>Finally make sure the import statement for the <code>esri.css</code> stylesheet is in the &lt;ArcGIS Server Install Location&gt;ArcGIS\Server\framework\runtime\tomcat\webapps\arcgis#rest\www\client\mapserver\mapserverJSAPI.jsp file.</p>
+
+<pre>&lt;style&gt;
+@import "&lt;%=jsapiArcgisCssUrl%&gt;";
+@import "&lt;%=cpath%&gt;/static/jsapi.css";
+@import "&lt;%=jsapiArcgisUrl%&gt;/js/esri/css/esri.css";
+&lt;/style&gt;</pre>
+
+<p>View the <a href="http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#//02r3000000pw000000">Configuring the Rest API</a> help topic for more details. </p>
+
+</body>
+</html>

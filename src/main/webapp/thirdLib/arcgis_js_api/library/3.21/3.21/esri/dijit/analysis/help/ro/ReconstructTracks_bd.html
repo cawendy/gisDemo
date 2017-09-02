@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" href="../css/analysis.css" />
+    <script type="text/javascript">
+        function init() {
+            if (window.location.hash) {
+                var parentDiv, nodes, i, helpInfo, helpId, helpInfoArr, helpEnvFilter, envContent, hideEnvClass, hideNodes;
+                helpInfo = window.location.hash.substring(1);
+                    if(helpInfo.indexOf("-")) {
+                        helpInfoArr = helpInfo.split("-");
+                        helpId = helpInfoArr[0];
+                        helpEnvFilter = helpInfoArr[1];
+                    }
+                    else {
+                        helpId = helpInfo;
+                    }
+                parentDiv = document.getElementById("topics");
+                nodes = parentDiv.children;
+                    hideEnvClass = (helpEnvFilter === "OnlineOnly"? "PortalOnly": "OnlineOnly");
+                    if(document.getElementsByClassName) {
+                        hideNodes = document.getElementsByClassName(hideEnvClass);
+                    }
+                    else {
+                        hideNodes = document.querySelectorAll(hideEnvClass);
+                    }
+                for(i=0; i < nodes.length; i++) {
+                    if(nodes[i].id !== helpId) {
+                        nodes[i].style.display ="none";
+                    }
+                    }
+                    for(i=0; i < hideNodes.length; i++) {
+                        hideNodes[i].style.display ="none";
+                    }
+                }
+            }
+    </script>
+</head>
+<body onload="init()">
+<div id="topics">
+    <div id="toolDescription" class="largesize">
+        <h2>Reconstruire trasee</h2><p/>
+        <h2><img src="../images/GUID-80807DB7-0CA7-4FD8-9702-B4486285D4FC-web.png" alt="Reconstruire trasee"></h2>
+        <hr/>
+    <p>Acest instrument funcţionează cu un strat tematic legat de timp cu obiecte spaţiale punct sau poligon care reprezintă  <code>instantaneu</code> timpul.   Mai &icirc;nt&acirc;i determină ce obiecte spaţiale aparţin unei urme utiliz&acirc;nd un identificator. Utiliz&acirc;nd timpul &icirc;n fiecare locaţie, traseele sunt ordonate secvenţial şi sunt transformate &icirc;ntr-o linie sau un poligon reprezent&acirc;nd calea deplasării &icirc;n timp. Opţional, intrarea poate fi inclusă &icirc;n buffer printr-un c&acirc;mp, care va crea un poligon &icirc;n fiecare locaţie. Aceste puncte incluse &icirc;n buffer sau dacă intrările sunt poligoane, sunt apoi unite secvenţial pentru a crea un traseu ca poligon &icirc;n care lăţimea reprezintă atributul de interes. Traseele rezultate au oră de &icirc;ncepere şi &icirc;ncheiere, care reprezintă temporal primul şi ultimul obiect spaţial de pe un traseu dat. Atunci c&acirc;nd sunt create trasee, statisticile despre obiectele spaţiale de intrare sunt calculate şi atribuite traseului de ieşire. Cea mai simplă statistică este calculul numărului de puncte din suprafaţă, &icirc;nsă pot fi calculate şi alte statistici.
+    </p>
+    <p>Obiectele spaţiale din straturile tematice legate de timp pot fi reprezentate &icirc;ntr-unul dintre cele două moduri următoare:
+        <ul>
+            <li>Instant &ndash; Un singur moment &icirc;n timp
+            </li>
+            <li>Interval &ndash; Oră de &icirc;ncepere şi de terminare
+            </li>
+        </ul>
+        
+    </p>
+    <p>De exemplu, să presupunem că aveţi măsurători GPS pentru uragane la fiecare 10 minute. Fiecare măsurătoare GPS &icirc;nregistrează numele, locaţia, ora &icirc;nregistrării şi viteza v&acirc;ntului pentru uragan. Cu aceste informaţii, aţi putea crea trasee pentru fiecare uragan utiliz&acirc;nd numele pentru identificarea traseului şi ar fi generate trasee pentru fiecare uragan. &Icirc;n plus, aţi putea calcula statistici precum viteza medie, maximă şi minimă a v&acirc;ntului pentru fiecare uragan, precum şi numărul de măsurători din fiecare traseu.
+    </p>
+    <p>Utiliz&acirc;nd acelaşi exemplu, aţi putea include &icirc;n buffer traseele dvs. după viteza v&acirc;ntului. Această acţiune ar include &icirc;n buffer fiecare măsurătoare a c&acirc;mpului de viteză a v&acirc;ntului din respectiva locaţie şi ar uni suprafeţele incluse &icirc;n buffer, cre&acirc;nd o reprezentare poligonală a căii traseului, precum şi modificări ale vitezei v&acirc;ntului pe măsură ce uraganele progresează.   
+    </p>
+    </div>
+    <!--Parameter divs for each param-->
+    <div id="inputLayer">
+        <div><h2>Selectaţi obiectele spaţiale pentru reconstruirea traseelor</h2></div>
+        <hr/>
+        <div>
+            <p>Stratul tematic de puncte sau poligoane care va fi reconstruit &icirc;n trasee. Stratul tematic de intrare trebuie să fie activat temporal cu obiecte spaţiale care reprezintă o instanţă a timpului. Stratul tematic trebuie să fie &icirc;ntr-un sistem de coordonate proiectate sau referinţa spaţială de procesare trebuie setată pe un sistem de coordonate proiectate utiliz&acirc;nd  <b>Mediul de analiză</b> &icirc;n cazul &icirc;n care este aplicat un buffer.
+            </p>
+            <p>&Icirc;n afară de a alege un strat tematic din harta dvs., puteţi selecta opţiunile  <b>Răsfoire straturi tematice</b> &icirc;n partea inferioară a listei verticale pentru a răsfoi conţinutul pentru stratul tematic sau setul de date pentru partajarea de fişiere big data.
+            </p>
+        </div>
+    </div>
+    <div id="trackFields">
+        <div><h2>Selectaţi unul sau mai multe câmpuri utilizate pentru identificarea traseelor</h2></div>
+        <hr/>
+        <div>
+            <p>C&acirc;mpurile care reprezintă identificatorul traseului. 
+            </p>
+            <p>De exemplu, dacă aţi reconstrui traseele uraganelor, aţi putea utiliza numele uraganului drept c&acirc;mp de trasee.
+            </p>
+        </div>
+    </div>
+    <div id="method">
+        <div><h2>Selectaţi metoda utilizată pentru reconstruirea traseelor</h2></div>
+        <hr/>
+        <div>
+            <p>Metoda de unire a traseelor şi de aplicare a bufferului (dacă este cazul). Metoda  <b>Planară</b> poate calcula rezultatele mai rapid, dar nu va &icirc;nfăşura traseele &icirc;n jurul liniei internaţionale de schimbare a datelor şi nu va lua &icirc;n considerare forma reală a păm&acirc;ntului atunci c&acirc;nd face buffering. Metoda <b>Geodezică</b> va &icirc;nfăşura traseele &icirc;n jurul liniei de schimbare a datelor dacă este necesar şi va aplica bufferul geodezic pentru a lua &icirc;n considerare forma reală a păm&acirc;ntului.
+            </p>
+        </div>
+    </div>
+    <div id="bufferField">
+        <div><h2>Crearea unei expresii pentru plasarea în buffer a obiectelor spaţiale de intrare (opţional)</h2></div>
+        <hr/>
+        <div>
+            <p>Ecuaţie utilizată pentru a calcula distanţa tampon din jurul obiectelor spaţiale de intrare. Această ecuaţie poate fi generată prin utilizarea calculatorului de buffer şi sunt acceptate operaţii de bază precum adunarea, scăderea, &icirc;nmulţirea şi &icirc;mpărţirea. Valorile sunt calculate utiliz&acirc;nd sistemul de coordonate de analiză. Stratul tematic trebuie să fie &icirc;ntr-un sistem de coordonate proiectate sau referinţa spaţială de procesare trebuie setată pe un sistem de coordonate proiectate utiliz&acirc;nd  <b>Mediul de analiză</b> &icirc;n cazul &icirc;n care este aplicat un buffer.
+            </p>
+        </div>
+    </div>
+    <div id="timeSplit">
+        <div><h2>Selectarea unei ore pentru segregarea traseelor (opţional)</h2></div>
+        <hr/>
+        <div>
+            <p>Timp utilizat pentru a &icirc;mpărţi traseele. Dacă punctele sau poligoanele de intrare au o durată mai lungă &icirc;ntre ele dec&acirc;t segmentul de timp, vor fi &icirc;mpărţite &icirc;n trasee diferite.
+            </p>
+        </div>
+    </div>
+    <div id="summaryFields">
+        <div><h2>Adăugare statistici (opţional)</h2></div>
+        <hr/>
+        <div>
+            <p> Puteţi calcula statistici despre obiectele spaţiale rezumate. &Icirc;n c&acirc;mpurile numerice puteţi calcula următoarele:
+                <ul>
+                    <li>Numărare&mdash;Calculează numărul de valori care nu sunt nule. Poate fi utilizat &icirc;n c&acirc;mpurile sau &icirc;n şirurile numerice. Calculul [nul, 0, 2] este egal cu 2.
+                    </li>
+                    <li>Sumă - Suma valorilor numerice dintr-un c&acirc;mp. Suma [nul, 0, 3] este egală cu 3.
+                    </li>
+                    <li>Media&mdash;Media valorilor numerice. Media dintre [0, 2, nul] este 1.
+                    </li>
+                    <li>Min&mdash;Valoarea minimă a unui c&acirc;mp numeric. Minimul dintre [0, 2, nul] este 0. 
+                    </li>
+                    <li>Max&mdash;Valoarea maximă a unui c&acirc;mp numeric. Valoarea maximă a [0, 2, nul] este 2.
+                    </li>
+                    <li>Interval&mdash;Intervalul unui c&acirc;mp numeric. Acesta este calculat ca valoare minimă scăzută din valoare maximă. Intervalul [nul, 0, 1] este 1. Intervalul [nul, 0, 4] este 0.
+                    </li>
+                    <li>Variaţia&mdash;Variaţia unui c&acirc;mp numeric pe o pistă. Variaţia [1] este nulă. Variaţia [nul, 1,1, 1] este 1.
+                    </li>
+                    <li>Deviaţia standard&mdash;Deviaţia standard a unui c&acirc;mp numeric. Deviaţia standard [1] este nulă. Deviaţia standard [nul, 1,1, 1] este 1. 
+                    </li>
+                </ul>
+                
+            </p>
+            <p>&Icirc;n c&acirc;mpurile de tip şir puteţi calcula următoarele:
+                <ul>
+                    <li>Calcul&mdash;Numărul şirurilor care nu sunt nule.
+                    </li>
+                    <li>Oricare - Această statistică este un exemplu aleatoriu al unei valori de tip şir &icirc;n c&acirc;mpul specificat.
+                    </li>
+                </ul>
+                Toate statisticile sunt calculate pentru valori care nu sunt nule. Stratul tematic rezultat va conţine un c&acirc;mp nou pentru fiecare statistică calculată. Se pot adăuga oric&acirc;te statistici aleg&acirc;nd un atribut şi o statistică. 
+            </p>
+        </div>
+    </div>
+    <div id="dataStore">
+        <div><h2>Alegeţi un depozit de date ArcGIS pe care să salvaţi rezultatele</h2></div>
+        <hr/>
+        <div>
+            <p>Rezultatele GeoAnalytics sunt stocate &icirc;ntr-un depozit de date ArcGIS şi sunt expuse ca un strat tematic de obiecte spaţiale &icirc;n  Portal for ArcGIS. &Icirc;n cele mai multe situaţii, rezultatele trebuie stocate &icirc;n depozitul de date spaţio-temporar, &icirc;n mod implicit. &Icirc;n unele situaţii, salvarea rezultatelor &icirc;n depozitul de date relaţionale este o opţiune bună. Următoarele sunt motivele pentru care aţi dori să stocaţi rezultatele &icirc;ntr-un depozit de date relaţionale: 
+                <ul>
+                    <li>Utilizaţi rezultatele &icirc;ntr-o colaborare portal la portal.
+                    </li>
+                    <li>Activaţi capacităţile de sincronizare cu rezultatele dvs.
+                    </li>
+                </ul>
+                
+            </p>
+            <p>Nu trebuie să utilizaţi depozitul de date relaţionale dacă vă aşteptaţi ca rezultatele GeoAnalytics să crească &icirc;n cantitate şi aveţi nevoie de capacităţile depozitului mare de stocare spaţio-temporal de a gestiona cantităţi mari de date. 
+            </p>
+        </div>
+    </div>
+    <div id="outputName">
+        <div><h2>Nume strat tematic rezultat</h2></div>
+        <hr/>
+        <div>
+            <p> Acesta este numele stratului tematic care va fi creat &icirc;n <b>Resursele mele</b> şi adăugat &icirc;n hartă.  Numele implicit se bazează pe numele instrumentului şi numele stratului tematic de intrare. Dacă stratul tematic există deja, instrumentul va eşua.
+            </p>
+            <p>Utiliz&acirc;nd caseta derulantă  <b>Salvare rezultat &icirc;n</b>, puteţi specifica numele unui director din <b>Resursele mele</b> &icirc;n care va fi salvat rezultatul.
+            </p>
+        </div>
+    </div>
+</div>
+</html>
