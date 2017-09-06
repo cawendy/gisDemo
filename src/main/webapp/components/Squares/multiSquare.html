@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QueryLocationInfo</title>
+    <link rel="stylesheet" href="../../thirdLib/arcgis_js_api/library/3.21/3.21/esri/css/esri.css">
+    <link rel="stylesheet" href="../../thirdLib//arcgis_js_api/library/3.21/3.21/dijit/themes/claro/claro.css">
+
+    <style>
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #FFF;
+            overflow: hidden;
+            font-family: "Trebuchet MS";
+        }
+        #toolbar {
+            position: relative;
+            width: 100%;
+            height: 50px;
+            background-color: white;
+            box-shadow: inset 0px -2px 0px #ddd;
+        }
+    </style>
+    <script src="../../js/config/dojoconfig.js"></script>
+    <script src="../../thirdLib/arcgis_js_api/library/3.21/3.21/init.js"></script>
+    <script>
+        var map;
+        require(["esri/map",
+                "esri/layers/ArcGISTiledMapServiceLayer",
+                "components/Squares/Squares",
+                "esri/tasks/QueryTask",
+                "esri/tasks/query",
+                "dojo/on",
+                "esri/geometry/Point",
+                "esri/SpatialReference",
+                "dojo/topic",
+                "dojo/_base/lang",
+                "dojo/domReady!"],
+            function(Map, ArcGISTiledMapServiceLayer,Squares,QueryTask,Query,on,Point,SpatialReference,topic,lang) {
+
+                map = new Map("map", {
+                    basemap: "topo",
+                    center: [100, 36],
+                    zoom:13
+                });
+
+                //var tiled = new ArcGISTiledMapServiceLayer("http://99.12.100.11:6080/arcgis/rest/services/basemap/MapServer");
+                //map.addLayer(tiled);
+
+                on(map, "load",lang.hitch(this,function () {
+                    //topic.publish("mapLoaded");
+
+                    var option = {
+                        "map":this.map,
+                        "radius":3,
+                        "centerPoint":new Point("113.36736","23.26753", new SpatialReference({ wkid: 4326 }))
+                        //"graphicsLayer":Global.drawLayer
+                    }
+
+                    var multipleRect = new Squares(option);
+                    multipleRect.clear();
+                    multipleRect.startDraw();
+                }));
+
+            }
+        );
+    </script>
+</head>
+<body class="claro">
+<div id="toolbar" >
+</div>
+<div id="map"></div>
+
+</body>
+</html>

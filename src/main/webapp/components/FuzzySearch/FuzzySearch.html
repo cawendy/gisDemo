@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>QueryLocationInfo</title>
-    <link rel="stylesheet" href="./thirdLib/arcgis_js_api/library/3.21/3.21/esri/css/esri.css">
-    <link rel="stylesheet" href="./thirdLib//arcgis_js_api/library/3.21/3.21/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="./components/FuzzySearch/css/Style.css">
+    <link rel="stylesheet" href="../../thirdLib/arcgis_js_api/library/3.21/3.21/esri/css/esri.css">
+    <link rel="stylesheet" href="../../thirdLib//arcgis_js_api/library/3.21/3.21/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="./css/Style.css">
     <style>
         html, body, #map {
             height: 100%;
@@ -26,8 +26,8 @@
             box-shadow: inset 0px -2px 0px #ddd;
         }
     </style>
-    <script src="./js/config/dojoconfig.js"></script>
-    <script src="./thirdLib/arcgis_js_api/library/3.21/3.21/init.js"></script>
+    <script src="../../js/config/dojoconfig.js"></script>
+    <script src="../../thirdLib/arcgis_js_api/library/3.21/3.21/init.js"></script>
     <script>
         var map;
         require(["esri/map",
@@ -35,11 +35,13 @@
                 "components/FuzzySearch/FuzzySearch",
                 "esri/tasks/QueryTask",
                 "esri/tasks/query",
+                "esri/geometry/Point",
+                "esri/SpatialReference",
                 "dojo/on",
                 "dojo/topic",
                 "dojo/_base/lang",
                 "dojo/domReady!"],
-            function(Map, ArcGISTiledMapServiceLayer,FuzzySearch,QueryTask,query,on,topic,lang) {
+            function(Map, ArcGISTiledMapServiceLayer,FuzzySearch,QueryTask,Query,Point,SpatialReference,on,topic,lang) {
 
                 map = new Map("map", {
                     basemap: "topo",

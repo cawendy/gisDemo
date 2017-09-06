@@ -1,202 +1,181 @@
 /**
- * Created by 80231765 on 2017/8/31.
+ * Created by 80231765 on 2017/9/4.
  */
 define(
-    [
-        "dojo/_base/declare",
-        "dojo/_base/lang",
-        "dojo/topic",
-        "dojo/dom-class",
-        "dojo/dom-construct",
-        "dojo/dom-style",
-        "dojo/on",
-        "dojo/query",
-		"dijit/form/Select",
-		"dijit/form/FilteringSelect",
-		"dijit/form/Button",
+	[
+		"dojo/_base/declare",
+		"dojo/_base/lang",
+		"dojo/topic",
+		"components/QueryLocationInfo/LocationWidget",
+		"esri/tasks/QueryTask",
+		"esri/tasks/query",
+		"esri/geometry/Extent",
+		"dojo/on",
 		"dojo/store/Memory",
-		"dojo/json",
-		"dojo/text!./states.json",
-		"dijit/_WidgetBase",
-		"dijit/_TemplatedMixin",
-        "dojo/text!./templates/Template.html",
-		"dojo/domReady!"
-    ],
-    function (declare, lang, topic,domClass, domConstruct,domStyle, on, query,Select,FilteringSelect,Button,Memory, json,states,_WidgetBase,_TemplatedMixin,Template) {
-        return declare([_WidgetBase,_TemplatedMixin], {
-			templateString:Template,
-			widgetInTemplate:true,//包含的组件在destroy中一并销毁
-			container:null,
-            provinceInit:"guangdong",
-            cityInit:"shenzhen",
-            countyInit:"baoan",
-            data:null,
-            provinceSelect:null,
-            citySelect:null,
-            countySelect:null,
-			Locator:null,
-
-            constructor:function (args) {
-			    /*
-                this.container = args.container;
-				this.provinceInit = args.province || this.provinceInit;
-				this.cityInit = args.city || this.cityInit;
-				this.countyInit = args.county || this.countyInit;
-                */
-			    this.options={
-					container:null,
-					provinceInit:"guangdong",
-					cityInit:"shenzhen",
-					countyInit:"baoan"
-                }
-                lang.mixin(this.options, args);
-			    Locator = this;
-              //  this.map = args.map;
-            },
-
-            postMixInProperties:function () {
-                this.inherited(arguments);
-            },
-
-            postCreate:function () {
-                this.init();
-                this.addEvents();
-                this.inherited(arguments);
-            },
-
-            startup:function () {
-				this.createSelector();
-                this.inherited(arguments);
-            },
-
-            init:function () {
-				domConstruct.place(this.domNode, this.container);
-            },
-            setData:function (value) {
-                this.data = value;
+		"esri/symbols/SimpleLineSymbol",
+		"esri/symbols/CartographicLineSymbol",
+		"esri/graphic",
+		"esri/layers/GraphicsLayer",
+		"esri/SpatialReference",
+		"esri/geometry/webMercatorUtils",
+		"esri/Color",
+		"esri/geometry/Geometry",
+		"esri/geometry/Polygon",
+		"esri/InfoTemplate",
+	],
+	function (declare,lang,topic,LocationWidget,QueryTask,Query,Extent,on,Memory,SimpleLineSymbol,CartographicLineSymbol,Graphic,GraphicsLayer,SpatialReference,webMercatorUtils,Color,
+			  Geometry,Polygon,InfoTemplate) {
+		return declare(null, {
+			locator: null,
+			provinceUrl:"",
+			cityUrl:"",
+			countyUrl:"",
+			placeHolder:null,
+			map:null,
+			drawBorderLayer:null,
+			constructor:function (args) {
+				//this.map=null;
+				this.provinceUrl = args.provinceUrl;
+				this.cityUrl = args.cityUrl;
+				this.countyUrl = args.countyUrl;
+				this.placeHolder = args.placeHolder;
+				this.map = args.map;
+				this.drawBorderLayer = new esri.layers.GraphicsLayer({className:"drawBorderLayer"});
 			},
-			setProvinceData:function (value) {
-                var stateStore = new Memory({
-                    idProperty: "no",
-                    data: value
-                });
-                this.provinceSelect.store =stateStore;
-                this.provinceSelect.startup();
-                currentStore = stateStore;
-            },
-            setCityData:function (value) {
-                var stateStore = new Memory({
-                    idProperty: "no",
-                    data: value
-                });
-                Locator.citySelect.store =stateStore;
-                Locator.citySelect.disabled = false;
-                Locator.citySelect.startup();
-                currentStore = stateStore;
-            },
-            setCountyData:function (value) {
-                var stateStore = new Memory({
-                    idProperty: "no",
-                    data: value
-                });
-                this.countySelect.store =stateStore;
-                this.countySelect.startup();
-                currentStore = stateStore;
-            },
-			createSelector:function () {
-				// create store instance referencing data from states.json
-				var stateStore = new Memory({
-					idProperty: "name",
-					data: json.parse(states)
+			/**
+			 * 初始化
+			 */
+			execute:function () {
+				this.loadLocationWidget();
+				this.startMonitor();
+			},
+			loadLocationWidget:function () {
+				//初始数据，谨防报错
+				var tmp = '[{ "no": "2", "name": "Alabama2" },{ "no": "1", "name": "Alabama1" }]';
+				var defaultData = {
+					"province":tmp,
+					"city":tmp,
+					"county":tmp
+				};
+				this.locator = new LocationWidget({
+					container:dojo.byId("toolbar"),
+					provinceInit:this.placeHolder.province,
+					cityInit:this.placeHolder.city,
+					countyInit:this.placeHolder.county,
+					data:defaultData
 				});
-				currentStore = stateStore;
-				currentState = {
-				    "province":this.options.provinceInit,
-				    "city":this.options.cityInit,
-				    "county":this.options.countyInit,
-                }
-                Locator.setCityData = this.setCityData;
-				// create FilteringSelect widget, populating its options from the store
-				 this.provinceSelect = new FilteringSelect({
-					name: "province",
-					placeHolder:this.options.provinceInit,
-					style: "width: 100px;",
-					//store: stateStore,
-				 	//disabled:true,
-					onChange: function(val){
-						currentState.province = val;
-						console.log(val);
-						console.log(currentStore.get(val));
-						Locator.citySelect.disabled = true;
-                        Locator.citySelect.startup();
-						var tmp =[];
-						tmp.push(currentStore.get(val));
-                        Locator.setCityData(tmp);
-					}
-				}, "province");
-				this.provinceSelect.startup();
-                this.provinceSelect.store = stateStore;
-
-				//provinceSelect.startup();
-   /*
-    // create Select widget, populating its options from the store
-				var provinceSelect = new Select({
-					name: "province",
-					store: stateStore,
-					style: "width: 100px;",
-					labelAttr: "name",
-					maxHeight: -1, // tells _HasDropDown to fit menu within viewport
-					onChange: function(value){
-						console.log(value);
-						//document.getElementById("value").innerHTML = value;
-						//document.getElementById("displayedValue").innerHTML = this.get("displayedValue");
-					}
-				}, "province");
-				provinceSelect.startup();
-*/
-				// create FilteringSelect widget, populating its options from the store
-				this.citySelect = new FilteringSelect({
-					name: "city",
-					placeHolder:this.options.cityInit,
-					style: "width: 100px;",
-					store: stateStore,
-                    disabled:true,
-					onChange: function(val){
-						currentState.city = val;
-					}
-				}, "city");
-				this.citySelect.startup();
-                //Locator["city"] = this.citySelect;
-
-				this.countySelect = new FilteringSelect({
-					name: "county",
-					placeHolder: this.options.countyInit,
-					style: "width: 100px;",
-
-					store: stateStore,
-					onChange: function(val){
-						currentState.county = val;
-					}
-				}, "county");
-				this.countySelect.startup();
-                Locator["county"] = this.citySelect;
-
-				var button = new Button({
-					iconClass: "",//dijitIconNewTask
-					showLabel: true,
-					label: "Search", // analogous to title when showLabel is false
-					onClick: function(){
-						topic.publish("locationInfo", currentState);
-					    }
-				}, "btn");
+				this.locator.startup();
 			},
+			startMonitor:function () {
+				topic.subscribe("mapLoaded",lang.hitch(this,function () {
+					this.queryProvince();
+					//this.queryCity();
+					//this.queryCounty();
+				}));
+				topic.subscribe("provinceCode",lang.hitch(this,this.queryCity));
+				topic.subscribe("cityCode",lang.hitch(this,this.queryCounty));
+				topic.subscribe("locationInfo",lang.hitch(this,this.drawCounty));
+			},
+			drawCounty:function (countyInfo) {
+				//var polygon = new Polygon(new SpatialReference({wkid:4326}));
+				//polygon.addRing(ringArr);
+				var polygon = countyInfo.county.geometry;
+				var lineSymbol =  new SimpleLineSymbol(
+					SimpleLineSymbol.STYLE_SOLID,
+					new Color([255,128,0]),
+					3
+				);
+				var attr = {"rings":"ring"};
+				var infoTemplate = new InfoTemplate("Branch Information","rings: ${rings}");
+				var border = new Graphic(polygon,lineSymbol,attr,infoTemplate);
+				this.drawBorderLayer.clear();
+				this.drawBorderLayer.add(border);
+				this.map.addLayer(this.drawBorderLayer);
 
-            addEvents:function () {
-                this.inherited(arguments);
-            },
+				//var extent = new Extent(this.xMin,this.yMin,this.xMax,this.yMax, new SpatialReference({ wkid:4326 }));
+				this.map.setExtent(polygon.getExtent(),true);
+			},
+			queryProvince:function () {
+				var queryTask = new QueryTask(this.provinceUrl);
+				var query = new Query();
+				query.outFields=["*"];
+				query.where="1=1";
+				//query.geometry = map.extent;
+				query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
+				query.returnGeometry = true;
+				queryTask.execute(query, lang.hitch(this, function (result) {
+					//数据处理
+					var features = result.features;
+					var dataArr = [];
+					for(var i=0;i<features.length;i++){
+						var obj = {
+							"name":features[i].attributes.Name_CHN,
+							"AdminCode":features[i].attributes.AdminCode,
+							"geometry":features[i].geometry
+						};
+						dataArr.push(obj);
+					}
+					//更新locator数据
+					//var tmp1 = [{ "no": "1", "name": "Alabama1" }];
+					this.locator.setProvinceData(dataArr);
 
-            destroy:function () {
-                this.inherited(arguments);
-            },
-        });
-    });
+					//this.locator.provinceSelector.store = provinceData;
+					this.locator.provinceSelector.startup();
+					this.locator.provinceSelector.disabled = false;
+					this.locator.provinceSelector.startup(); //设置更新
+				}));
+			},
+			queryCity:function (proviceCode) {
+				var queryTask = new QueryTask(this.cityUrl);
+				var query = new Query();
+				query.outFields=["*"];
+				query.where="AdminCode like '"+proviceCode+"%'";
+				//query.geometry = map.extent;
+				query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
+				query.returnGeometry = true;
+				queryTask.execute(query, lang.hitch(this, function (result) {
+					//数据处理
+					var features = result.features;
+					var dataArr = [];
+					for(var i=0;i<features.length;i++){
+						var obj = {
+							"name":features[i].attributes.Name,
+							"AdminCode":features[i].attributes.AdminCode,
+							"geometry":features[i].geometry
+						};
+						dataArr.push(obj);
+					}
+					//更新locator数据
+					this.locator.setCityData(dataArr);
+					this.locator.citySelector.disabled = false;
+					this.locator.citySelector.startup(); //设置更新
+				}));
+			},
+			queryCounty:function (cityCode) {
+				var queryTask = new QueryTask(this.countyUrl);
+				var query = new Query();
+				query.outFields=["*"];
+				query.where="AdminCode like '"+cityCode+"%'";
+				//query.geometry = map.extent;
+				query.spatialRelationship = Query.SPATIAL_REL_INTERSECTS;
+				query.returnGeometry = true;
+				queryTask.execute(query, lang.hitch(this, function (result) {
+					//数据处理
+					var features = result.features;
+					var dataArr = [];
+					for(var i=0;i<features.length;i++){
+						var obj = {
+							"name":features[i].attributes.Name_CHN,
+							"AdminCode":features[i].attributes.AdminCode,
+							"geometry":features[i].geometry
+						};
+						dataArr.push(obj);
+					}
+					//更新locator数据
+					this.locator.setCountyData(dataArr);
+					this.locator.countySelector.disabled = false;
+					this.locator.countySelector.startup(); //设置更新
+				}));
+			},
+		});
+	});

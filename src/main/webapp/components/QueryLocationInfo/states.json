@@ -1,4 +1,4 @@
 [
-  { "name": "Alabama2","other":"inofo" ,"id":"d","no2": "2"},
-  {  "name": "Alabama1" ,"d":"ddd","no1": "1"}
+  { "no": "AdminCode", "name": "Alabama2" },
+  { "no": "AdminCode", "name": "Alabama1" }
 ]
