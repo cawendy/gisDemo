@@ -5,7 +5,7 @@
     <title>QueryLocationInfo</title>
     <link rel="stylesheet" href="./thirdLib/arcgis_js_api/library/3.21/3.21/esri/css/esri.css">
     <link rel="stylesheet" href="./thirdLib//arcgis_js_api/library/3.21/3.21/dijit/themes/claro/claro.css">
-    <link rel="stylesheet" href="./components/QueryLocationInfo/css/Style.css">
+    <link rel="stylesheet" href="./components/FuzzySearch/css/Style.css">
     <style>
         html, body, #map {
             height: 100%;
@@ -29,46 +29,48 @@
     <script src="./js/config/dojoconfig.js"></script>
     <script src="./thirdLib/arcgis_js_api/library/3.21/3.21/init.js"></script>
     <script>
-		var map;
-		require(["esri/map",
+        var map;
+        require(["esri/map",
                 "esri/layers/ArcGISTiledMapServiceLayer",
-                "components/QueryLocationInfo/QueryLocationInfo",
+                "components/FuzzySearch/FuzzySearch",
                 "esri/tasks/QueryTask",
                 "esri/tasks/query",
                 "dojo/on",
                 "dojo/topic",
                 "dojo/_base/lang",
                 "dojo/domReady!"],
-				function(Map, ArcGISTiledMapServiceLayer,QueryLocationInfo,QueryTask,query,on,topic,lang) {
+            function(Map, ArcGISTiledMapServiceLayer,FuzzySearch,QueryTask,query,on,topic,lang) {
 
-					map = new Map("map", {
-                        basemap: "topo",
-						center: [100, 36],
-						zoom:13
-					});
+                map = new Map("map", {
+                    basemap: "topo",
+                    center: [100, 36],
+                    zoom:13
+                });
 
-					//var tiled = new ArcGISTiledMapServiceLayer("http://99.12.100.11:6080/arcgis/rest/services/basemap/MapServer");
-					//map.addLayer(tiled);
+                //var tiled = new ArcGISTiledMapServiceLayer("http://99.12.100.11:6080/arcgis/rest/services/basemap/MapServer");
+                //map.addLayer(tiled);
 
-					on(map, "load",this.onMapLoaded);
-					var locator = new QueryLocationInfo({
-						container:dojo.byId("toolbar")
-					});
-					locator.startup();
-					var tmp =[{ "no": "2", "name": "Alabama2" },{ "no": "1", "name": "Alabama3" }];
-                    locator.setProvinceData(tmp);
-					topic.subscribe("locationInfo", lang.hitch(this, function (value) {
-                        console.log(value);
-					}));
 
-				}
-		);
+                on(map, "load",lang.hitch(this,function () {
+                    //topic.publish("mapLoaded");
+                    var  url = "http://99.12.88.47:6080/arcgis/rest/services/crm/crmbranch/MapServer/0";
+                    var searcher = new FuzzySearch({
+                        "map":this.map,
+                        "serviceUrl":url,
+                        "container":dojo.byId("toolbar")
+                    });
+                    searcher.startup();
+                    alert("构造数据即可用");
+                }));
+
+            }
+        );
     </script>
 </head>
 <body class="claro">
-    <div id="toolbar" >
-    </div>
-    <div id="map"></div>
+<div id="toolbar" >
+</div>
+<div id="map"></div>
 
 </body>
 </html>

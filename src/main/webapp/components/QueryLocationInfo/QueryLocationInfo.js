@@ -31,6 +31,11 @@ define(
             cityInit:"shenzhen",
             countyInit:"baoan",
             data:null,
+            provinceSelect:null,
+            citySelect:null,
+            countySelect:null,
+			Locator:null,
+
             constructor:function (args) {
 			    /*
                 this.container = args.container;
@@ -45,6 +50,7 @@ define(
 					countyInit:"baoan"
                 }
                 lang.mixin(this.options, args);
+			    Locator = this;
               //  this.map = args.map;
             },
 
@@ -69,29 +75,69 @@ define(
             setData:function (value) {
                 this.data = value;
 			},
+			setProvinceData:function (value) {
+                var stateStore = new Memory({
+                    idProperty: "no",
+                    data: value
+                });
+                this.provinceSelect.store =stateStore;
+                this.provinceSelect.startup();
+                currentStore = stateStore;
+            },
+            setCityData:function (value) {
+                var stateStore = new Memory({
+                    idProperty: "no",
+                    data: value
+                });
+                Locator.citySelect.store =stateStore;
+                Locator.citySelect.disabled = false;
+                Locator.citySelect.startup();
+                currentStore = stateStore;
+            },
+            setCountyData:function (value) {
+                var stateStore = new Memory({
+                    idProperty: "no",
+                    data: value
+                });
+                this.countySelect.store =stateStore;
+                this.countySelect.startup();
+                currentStore = stateStore;
+            },
 			createSelector:function () {
 				// create store instance referencing data from states.json
 				var stateStore = new Memory({
-					idProperty: "no",
+					idProperty: "name",
 					data: json.parse(states)
 				});
-
+				currentStore = stateStore;
 				currentState = {
 				    "province":this.options.provinceInit,
 				    "city":this.options.cityInit,
 				    "county":this.options.countyInit,
                 }
+                Locator.setCityData = this.setCityData;
 				// create FilteringSelect widget, populating its options from the store
-				var provinceSelect = new FilteringSelect({
+				 this.provinceSelect = new FilteringSelect({
 					name: "province",
 					placeHolder:this.options.provinceInit,
 					style: "width: 100px;",
-					store: stateStore,
+					//store: stateStore,
+				 	//disabled:true,
 					onChange: function(val){
 						currentState.province = val;
+						console.log(val);
+						console.log(currentStore.get(val));
+						Locator.citySelect.disabled = true;
+                        Locator.citySelect.startup();
+						var tmp =[];
+						tmp.push(currentStore.get(val));
+                        Locator.setCityData(tmp);
 					}
 				}, "province");
-				provinceSelect.startup();
+				this.provinceSelect.startup();
+                this.provinceSelect.store = stateStore;
+
+				//provinceSelect.startup();
    /*
     // create Select widget, populating its options from the store
 				var provinceSelect = new Select({
@@ -109,27 +155,31 @@ define(
 				provinceSelect.startup();
 */
 				// create FilteringSelect widget, populating its options from the store
-				var citySelect = new FilteringSelect({
+				this.citySelect = new FilteringSelect({
 					name: "city",
 					placeHolder:this.options.cityInit,
 					style: "width: 100px;",
 					store: stateStore,
+                    disabled:true,
 					onChange: function(val){
 						currentState.city = val;
 					}
 				}, "city");
-				citySelect.startup();
+				this.citySelect.startup();
+                //Locator["city"] = this.citySelect;
 
-				var countySelect = new FilteringSelect({
+				this.countySelect = new FilteringSelect({
 					name: "county",
 					placeHolder: this.options.countyInit,
 					style: "width: 100px;",
+
 					store: stateStore,
 					onChange: function(val){
 						currentState.county = val;
 					}
 				}, "county");
-				countySelect.startup();
+				this.countySelect.startup();
+                Locator["county"] = this.citySelect;
 
 				var button = new Button({
 					iconClass: "",//dijitIconNewTask
